@@ -10,13 +10,19 @@
   []
   (.getAbsolutePath
    (doto (file (home-dir) "cdt")
-     .mkdir)))
+     .mkdirs)))
 
 (defn cdt-lib-dir
   []
   (.getAbsolutePath
    (doto (file (cdt-home-dir) "lib")
-     .mkdir)))
+     .mkdirs)))
+
+(defn cdt-src-dir
+  []
+  (.getAbsolutePath
+   (doto (file (cdt-home-dir) "src")
+     .mkdirs)))
 
 (defn cdt-config
   [project]
@@ -24,17 +30,28 @@
    {:remote-el "https://github.com/GeorgeJahad/cdt/raw/master/ide/emacs/cdt.el"
     :local-el (.getAbsolutePath (file (cdt-home-dir) "cdt.el"))
     :cdt-dir (cdt-home-dir)
-    :lib-dir (cdt-lib-dir)}
+    :lib-dir (cdt-lib-dir)
+    :clj-src "http://cloud.github.com/downloads/clojure/clojure/clojure-1.2.0.zip"
+    :contrib-src "http://cloud.github.com/downloads/clojure/clojure-contrib/clojure-contrib-1.2.0.zip"
+    :src-dir (cdt-src-dir)}
    (:cdt project)))
 
 (defn download
   [remote local]
-  (copy (.openStream (as-url remote)) (file local))
+  (let [i (.openStream (as-url remote))]
+    (copy i (file local))
+    (.close i))
   local)
 
-(defn download-cdt-el
-  [remote-cdt-el local-cdt-el]
-  (download remote-cdt-el local-cdt-el))
+(defn unzip
+  [filename out-dir]
+  (let [zipfile (java.util.zip.ZipFile. filename)]
+    (doseq [entry (enumeration-seq (.entries zipfile))]
+      (let [outfile (file out-dir (.getName entry))]
+        (if (.isDirectory entry)
+          (.mkdirs outfile)
+          (copy (.getInputStream zipfile entry)
+                outfile))))))
 
 (defn cdt-emacs
   "Download CDT dependencies to a central location and print instructions
@@ -59,7 +76,15 @@ Example:
         dummy-project {:root (:root project)
                        :library-path (:lib-dir c)
                        :dependencies [['cdt "1.2"]]}]
-    (download-cdt-el (:remote-el c) (:local-el c))
+    (download (:remote-el c) (:local-el c))
+    (println "Downloading" (:clj-src c) "to" (:src-dir c))
+    (unzip (download (:clj-src c)
+                     (java.io.File/createTempFile "clojure" "zip"))
+           (:src-dir c))
+    (println "Downloading" (:contrib-src c) "to" (:src-dir c))
+    (unzip (download (:contrib-src c)
+                     (java.io.File/createTempFile "clojure-contrib" "zip"))
+           (:src-dir c))
     (deps dummy-project)
     (println (str "
 Thanks for using CDT!
@@ -68,8 +93,9 @@ I've downloaded the jars you'll need to " (:lib-dir c) ". To use the emacs front
 add the following elisp to your emacs init files:
 
 "
-"(setq cdt-dir " (:cdt-dir c) ")
-
+"(setq cdt-dir \"" (:cdt-dir c) "\")
+"
+"(setq cdt-source-path (let ((src-root \"" (:src-dir c) "\")) (format \"%s/clojure-1.2.0/src/jvm:%s/clojure-1.2.0/src/clj:%s/clojure-contrib-1.2.0/src/main/clojure:\" src-root src-root src-root)))
 "
 "(load-file \"" (:local-el c) "\")
 
