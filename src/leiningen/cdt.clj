@@ -13,7 +13,7 @@
 (defn repl-client-send-cdt-init-hook
   [port]
   (fn [f reader writer & args]
-      (.write writer (str "(do (in-ns 'user) (use 'com.georgejahad.cdt) (cdt-attach 8021))\n"))
+      (.write writer (str "(do (in-ns 'user) (use 'com.georgejahad.cdt) (cdt-attach " port "))\n"))
       (.flush writer)
       ;; clear out the first prompt and return value of the init code
       (.read reader (make-array Character/TYPE 1000))
