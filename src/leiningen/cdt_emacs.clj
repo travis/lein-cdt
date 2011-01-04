@@ -75,7 +75,7 @@ Example:
   (let [c (cdt-config project)
         dummy-project {:root (:root project)
                        :library-path (:lib-dir c)
-                       :dependencies [['cdt "1.2.1"]]}]
+                       :dependencies [['cdt "1.2.2"]]}]
     (download (:remote-el c) (:local-el c))
     (println "Downloading" (:clj-src c) "to" (:src-dir c))
     (unzip (download (:clj-src c)
