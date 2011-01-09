@@ -1,5 +1,5 @@
 (ns leiningen.cdt-emacs
-  "Download CDT dependencies and print instructions for setting up emacs integration"
+  "Download CDT source dependencies and print instructions for setting up emacs integration"
   (:use [clojure.java.io :only [as-url copy file]]
         [leiningen.cdt :only [default-cdt-debug-port]]
         [leiningen.core :only [home-dir]]
@@ -54,7 +54,7 @@
                 outfile))))))
 
 (defn cdt-emacs
-  "Download CDT dependencies to a central location and print instructions
+  "Download CDT source dependencies to a central location and print instructions
 for setting up emacs integration.
 
 Users can specify the following config values within the :cdt hash in project.clj:

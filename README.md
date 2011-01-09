@@ -17,12 +17,23 @@ repl, lein swank, etc), run "lein cdt".
 "lein cdt" starts a REPL, 'uses' com.georgejahad.cdt and runs
 attach-cdt.
 
+"lein cdt-emacs" downloads the Clojure source to a central location
+and prints instructions for configuring emacs to work with CDT.
+
 Projects can set :cdt-debug-port to change the JVM debug port (which
 is used by CDT).
 
 More info on CDT here:
 
 [http://georgejahad.com/clojure/cdt.html](http://georgejahad.com/clojure/cdt.html)
+
+TODO:
+ - upgrading CDT versions is currently tricky - it requires updates in
+   project.clj and cdt_emacs.clj
+ - cdt-emacs is currently hardcoded to download Clojure 1.2.0 - this
+   should be configurable or something
+ - downloading other source?
+ - top-to-bottom tutorial would be nice
 
 ## License
 
