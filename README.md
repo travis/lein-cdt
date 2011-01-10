@@ -16,9 +16,9 @@ to project.clj.
 ### Standard usage
 
 To connect to any running debug JVM (ie, hooked and started via lein
-repl or lein swank), run "lein cdt".
+repl or lein swank), run `lein cdt`.
 
-"lein cdt" starts a REPL, 'uses' com.georgejahad.cdt and runs
+`lein cdt` starts a REPL, 'uses' com.georgejahad.cdt and runs
 attach-cdt.
 
 Projects can set :cdt-debug-port to change the JVM debug port (which
@@ -26,7 +26,7 @@ is used by CDT). The default CDT port is 8021.
 
 ### emacs integration
 
-"lein cdt-emacs" downloads the Clojure source to a central location
+`lein cdt-emacs` downloads the Clojure source to a central location
 and prints instructions for configuring emacs to work with CDT.
 
 ## Resources
