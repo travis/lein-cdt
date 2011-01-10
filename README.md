@@ -32,7 +32,9 @@ TODO:
    project.clj and cdt_emacs.clj
  - cdt-emacs is currently hardcoded to download Clojure 1.2.0 - this
    should be configurable or something
- - downloading other source?
+ - cdt-emacs currently hardcoded to a particular cdt version - is
+   there a better way?
+ - downloading other sources?
  - top-to-bottom tutorial would be nice
 
 ## License
